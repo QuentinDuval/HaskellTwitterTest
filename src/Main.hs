@@ -25,24 +25,14 @@ import Web.Twitter.Types
 -- DOC
 -- http://hackage.haskell.org/package/twitter-conduit-0.1.0/docs/Web-Twitter-Conduit.html#
 
-tokens :: OAuth
-tokens = twitterOAuth
-    { oauthConsumerKey = "YOUR CONSUMER KEY"
-    , oauthConsumerSecret = "YOUR CONSUMER SECRET"
-    }
 
-credential :: Credential
-credential = Credential
-    [ ("oauth_token", "YOUR ACCESS TOKEN")
-    , ("oauth_token_secret", "YOUR ACCESS TOKEN SECRET")
-    ]
-
-twitterInfo :: TWInfo
-twitterInfo = setCredential tokens credential def
-
-
-main::IO()
+main :: IO()
 main = do
+   let tokens = twitterOAuth { oauthConsumerKey = "YOUR CONSUMER KEY" , oauthConsumerSecret = "YOUR CONSUMER SECRET" }
+   let credential = Credential
+         [ ("oauth_token", "YOUR ACCESS TOKEN"), ("oauth_token_secret", "YOUR ACCESS TOKEN SECRET") ]
+   let twitterInfo = setCredential tokens credential def
+
    timeline <- withManager $ \m -> call twitterInfo m homeTimeline
                                    -- call twitterInfo mgr $ homeTimeline & count ?~ 200
    print timeline
