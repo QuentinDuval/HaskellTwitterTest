@@ -31,8 +31,7 @@ main = do
    logInfo <- fromFile =<< head <$> getArgs
    withManager $ \m -> 
       sourceWithMaxId logInfo m homeTimeline
-         $= CL.isolate 60
-         $$ CL.mapM_ $ liftIO . handleTweet
+         $$ CL.isolate 60 =$ CL.mapM_ (liftIO . handleTweet)
 
 
 handleTweet :: Status -> IO ()
