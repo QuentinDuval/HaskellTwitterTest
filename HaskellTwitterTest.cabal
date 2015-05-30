@@ -26,5 +26,6 @@ executable HaskellTwitterTest
   ghc-options:     -Wall
   other-modules:   
                    TwitterAuth,
-                   TwitterInfo
+                   TwitterInfo,
+                   TwitterFilters
 
