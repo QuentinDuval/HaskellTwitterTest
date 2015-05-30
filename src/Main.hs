@@ -32,7 +32,10 @@ main = do
    withManager $ \m -> 
       sourceWithMaxId twitterInfo m homeTimeline
          $= CL.isolate 60
-         $$ CL.mapM_ $ \status ->
-            liftIO $ T.putStrLn (status ^. statusUser . userScreenName)
+         $$ CL.mapM_ $ liftIO . handleTweet
+
+
+handleTweet :: Status -> IO ()
+handleTweet status = T.putStrLn (status ^. statusUser . userScreenName)
 
 
