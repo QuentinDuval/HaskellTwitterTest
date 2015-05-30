@@ -13,17 +13,17 @@ import Data.Text as T
 import TwitterInfo
 
 
-tweetPipe :: (MonadIO m) => Text -> Sink TweetInfo m ()
-tweetPipe filterCriteria =
+tweetPipe :: (MonadIO m) => Text -> Int -> Sink TweetInfo m ()
+tweetPipe filterCriteria count' =
    CL.filter (userLike filterCriteria)
-   $= CL.isolate 1
+   $= CL.isolate count'
    =$ CL.mapM_ (liftIO . handleTweet)
 
 
-tweetSinkList :: (Monad m) => Text -> Sink TweetInfo m [TweetInfo]
-tweetSinkList filterCriteria=
+tweetSinkList :: (Monad m) => Text -> Int -> Sink TweetInfo m [TweetInfo]
+tweetSinkList filterCriteria count' =
    CL.filter (userLike filterCriteria)
-   $= CL.isolate 1
+   $= CL.isolate count'
    =$ CL.fold (flip (:)) []
 
 

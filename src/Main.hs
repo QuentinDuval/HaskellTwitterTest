@@ -16,13 +16,14 @@ import TwitterSources
 main :: IO()
 main = do
    logInfo <- fromFile =<< head <$> getArgs
-   withManager $ \m -> realSource logInfo m $$ tweetPipe "haskell"
+   withManager $ \m -> realSource logInfo m $$ tweetPipe "haskell" 1
    
    
 test :: IO ()
 test = do
-   r <- fakeSource "haskell" $$ tweetSinkList "haskell"
-   print r
+   let authors = ["john_doe", "reddit_haskell", "1HaskellADay"]
+   r <- fakeSource authors $$ tweetSinkList "haskell" 10
+   mapM_ print r
 
 
 
