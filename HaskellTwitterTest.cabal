@@ -28,5 +28,6 @@ executable HaskellTwitterTest
   other-modules:   
                    TwitterAuth,
                    TwitterInfo,
-                   TwitterFilters
+                   TwitterPipe,
+                   TwitterSources
 
