@@ -6,8 +6,13 @@ module OutputBuilder (
 
 
 import Control.Lens
-import Data.ByteString.Lazy as B
+import qualified Data.ByteString.Lazy as B
+import Data.List(intersperse)
+import Data.Monoid
+import Data.Text (Text)
+import qualified Data.Text as T
 import Text.Blaze.Html5 as H
+import Text.Blaze.XHtml5.Attributes(href)
 import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
 
 import TwitterInfo
@@ -16,7 +21,16 @@ import TwitterInfo
 
 newtype HtmlTweet = HtmlTweet { fromHtml :: TweetInfo }
 instance ToMarkup HtmlTweet where
-   toMarkup t = text (fromHtml t ^. content)
+   toMarkup t =
+      let ws = T.words (fromHtml t ^. content)
+          ms = fmap wordToMarkup ws
+      in mconcat (intersperse (text " ") ms)
+
+
+wordToMarkup :: Text -> Markup
+wordToMarkup t
+   | "http://" `T.isInfixOf` t = a ! href (textValue t) $ text t
+   | otherwise = text t
 
 
 buildHtml :: [TweetInfo] -> Html
