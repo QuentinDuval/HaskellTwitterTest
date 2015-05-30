@@ -58,3 +58,4 @@ $RECYCLE.BIN/
 *.lnk
 *.prefs
 .dist-buildwrapper
+keys.txt
