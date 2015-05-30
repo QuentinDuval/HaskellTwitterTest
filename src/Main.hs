@@ -19,6 +19,7 @@ main = do
    tweets <- withManager $ \m ->
       tweetSelect (realSource logInfo m) "haskell" 10
    mapM_ print tweets
+   -- TODO - create an HTML page from these data
    
    
 test :: IO ()
