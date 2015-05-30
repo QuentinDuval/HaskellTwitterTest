@@ -24,5 +24,7 @@ executable HaskellTwitterTest
                    lens >=4.7 && <4.8,
                    twitter-types-lens >=0.7 && <0.8
   ghc-options:     -Wall
-  other-modules:   TwitterAuth
+  other-modules:   
+                   TwitterAuth,
+                   TwitterInfo
 
