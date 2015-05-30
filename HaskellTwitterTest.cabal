@@ -22,4 +22,5 @@ executable HaskellTwitterTest
                    http-conduit >=2.1 && <2.2,
                    bytestring >=0.10 && <0.11
   ghc-options:     -Wall
+  other-modules:   TwitterAuth
 
