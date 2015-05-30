@@ -3,11 +3,11 @@ module Main where
 
 
 import Control.Applicative
-import Data.Conduit as C
 import Network.HTTP.Conduit
 import System.Environment
 
 import TwitterAuth
+import TwitterInfo
 import TwitterPipe
 import TwitterSources
 
@@ -16,15 +16,17 @@ import TwitterSources
 main :: IO()
 main = do
    logInfo <- fromFile =<< head <$> getArgs
-   withManager $ \m -> realSource logInfo m $$ tweetPipe "haskell" 1
+   tweets <- withManager $ \m ->
+      tweetSelect (realSource logInfo m) "haskell" 10
+   mapM_ print tweets
    
    
 test :: IO ()
 test = do
-   let authors = ["john_doe", "reddit_haskell", "1HaskellADay"]
-   r <- fakeSource authors $$ tweetSinkList "haskell" 10
-   mapM_ print r
-
+   input <- lines <$> readFile "testTweets.txt"
+   let tweets = map (read :: String -> TweetInfo) input
+   res <- tweetSelect (fakeSource tweets) "haskell" 50
+   mapM_ print (take 5 res)
 
 
 

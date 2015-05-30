@@ -1,29 +1,30 @@
+{-# LANGUAGE OverloadedStrings #-}
 module TwitterPipe (
-   tweetPipe,
-   tweetSinkList
+   tweetSelect
 ) where
 
 
 import Control.Lens
-import Control.Monad.IO.Class
 import Data.Conduit as C
 import qualified Data.Conduit.List as CL
-import Data.Text as T
+import Data.List
+import Data.Ord
+import Data.Text(Text)
+import qualified Data.Text as T
 
 import TwitterInfo
 
 
-tweetPipe :: (MonadIO m) => Text -> Int -> Sink TweetInfo m ()
-tweetPipe filterCriteria count' =
-   CL.filter (userLike filterCriteria)
-   $= CL.isolate count'
-   =$ CL.mapM_ (liftIO . handleTweet)
+tweetSelect :: (Monad m) => Source m TweetInfo -> Text -> Int -> m [TweetInfo]
+tweetSelect src filter' count' = do
+   res <- src $$ tweetSink filter' count'
+   return $ sortBy (comparing (Down . _popularity)) res
 
 
-tweetSinkList :: (Monad m) => Text -> Int -> Sink TweetInfo m [TweetInfo]
-tweetSinkList filterCriteria count' =
+tweetSink :: (Monad m) => Text -> Int -> Sink TweetInfo m [TweetInfo]
+tweetSink filterCriteria maxCount =
    CL.filter (userLike filterCriteria)
-   $= CL.isolate count'
+   $= CL.isolate maxCount
    =$ CL.fold (flip (:)) []
 
 
@@ -32,7 +33,4 @@ userLike name' info =
    let pat = T.toLower name'
    in T.isInfixOf pat $ T.toLower (info ^. author . authorName)
 
-
-handleTweet :: TweetInfo -> IO ()
-handleTweet = print
 

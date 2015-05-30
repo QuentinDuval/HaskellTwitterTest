@@ -9,7 +9,7 @@ import Web.Twitter.Types.Lens
 data AuthorInfo = AuthorInfo {
    _authorName :: Text,
    _authorPopularity :: Int
-} deriving (Show, Eq, Ord)
+} deriving (Show, Eq, Ord, Read)
 
 
 data TweetInfo = TweetInfo {
@@ -17,7 +17,7 @@ data TweetInfo = TweetInfo {
    _author      :: AuthorInfo,
    _content     :: Text,
    _popularity  :: Integer
-} deriving (Show, Eq, Ord)
+} deriving (Show, Eq, Ord, Read)
 
 
 makeLenses ''AuthorInfo
