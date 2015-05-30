@@ -24,11 +24,24 @@ main :: IO()
 main = do
    logInfo <- fromFile =<< head <$> getArgs
    withManager $ \m -> realSource logInfo m $$ tweetPipe "haskell"
+   
+   
+test :: IO()
+test = fakeSource $$ tweetPipe "haskell"
 
 
 realSource :: (MonadResource m) => TWInfo -> Manager -> Source m TweetInfo
 realSource logInfo m =
    sourceWithMaxId logInfo m homeTimeline $= CL.map extractInfo
+
+
+fakeSource :: (Monad m) => Source m TweetInfo
+fakeSource = yield
+   TweetInfo {
+      _uniqueId = 1,
+      _author = AuthorInfo { _authorName = "john_doe", _authorPopularity = 2},
+      _content = "Dummy content with link! http://www.google.fr",
+      _popularity = 0}
 
 
 tweetPipe :: (MonadIO m) => Text -> Sink TweetInfo m ()
