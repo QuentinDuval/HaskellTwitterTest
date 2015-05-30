@@ -18,7 +18,6 @@ import Data.Text(Text)
 
 import Network.HTTP.Conduit
 import System.Environment
-
 import Web.Twitter.Conduit
 import Web.Twitter.Types
 
