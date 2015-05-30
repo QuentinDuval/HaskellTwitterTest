@@ -59,3 +59,4 @@ $RECYCLE.BIN/
 *.prefs
 .dist-buildwrapper
 keys.txt
+out.html
