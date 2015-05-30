@@ -27,11 +27,14 @@ extractInfo :: Status -> TweetInfo
 extractInfo status =
    TweetInfo {
       _uniqueId = status ^. statusId,
-      _author = AuthorInfo { 
-            _authorName = status ^. statusUser . userName,
-            _authorPopularity = status ^. statusUser . userFollowersCount
-                              + status ^. statusUser . userFriendsCount
-         },
+      _author = extractUserInfo status,
       _content = status ^. statusText,
       _popularity = status ^. statusRetweetCount + status ^. statusFavoriteCount
    }
+
+extractUserInfo :: Status -> AuthorInfo
+extractUserInfo status = AuthorInfo { 
+   _authorName = status ^. statusUser . userName,
+   _authorPopularity = status ^. statusUser . userFollowersCount + status ^. statusUser . userFriendsCount
+}
+
