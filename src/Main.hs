@@ -28,9 +28,9 @@ import TwitterAuth
 
 main :: IO()
 main = do
-   twitterInfo <- fromFile =<< head <$> getArgs
+   logInfo <- fromFile =<< head <$> getArgs
    withManager $ \m -> 
-      sourceWithMaxId twitterInfo m homeTimeline
+      sourceWithMaxId logInfo m homeTimeline
          $= CL.isolate 60
          $$ CL.mapM_ $ liftIO . handleTweet
 
