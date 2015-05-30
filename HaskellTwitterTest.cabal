@@ -31,3 +31,18 @@ executable HaskellTwitterTest
                    TwitterPipe,
                    TwitterSources
 
+test-suite TwitterSuite
+  type:            exitcode-stdio-1.0
+  main-is:         TwitterSuite.hs
+  ghc-options:     -Wall -rtsopts
+  build-depends:   base >= 4, tasty > 0.10, tasty-hunit, HUnit, tasty-quickcheck, QuickCheck
+  other-modules:   
+                  TwitterAuth,
+                  TwitterSources,
+                  TwitterInfo,
+                  TwitterPipe,
+                  TwitterPipeTest
+  hs-source-dirs:  
+                  tests,
+                  src
+
