@@ -13,7 +13,6 @@ import Data.Text(Text)
 import Network.HTTP.Conduit
 import System.Environment
 import Web.Twitter.Conduit
-import Web.Twitter.Types.Lens
 
 import TwitterAuth
 import TwitterFilters
@@ -24,17 +23,17 @@ import TwitterInfo
 main :: IO()
 main = do
    logInfo <- fromFile =<< head <$> getArgs
-   withManager $ \m -> liveSource logInfo m $$ tweetPipe "haskell"
+   withManager $ \m -> realSource logInfo m $$ tweetPipe "haskell"
 
 
-liveSource :: (MonadResource m) => TWInfo -> Manager -> Source m Status
-liveSource logInfo m = sourceWithMaxId logInfo m homeTimeline
+realSource :: (MonadResource m) => TWInfo -> Manager -> Source m TweetInfo
+realSource logInfo m =
+   sourceWithMaxId logInfo m homeTimeline $= CL.map extractInfo
 
 
-tweetPipe :: (MonadIO m) => Text -> Sink Status m ()
+tweetPipe :: (MonadIO m) => Text -> Sink TweetInfo m ()
 tweetPipe filterCriteria =
-    CL.map extractInfo
-    $= CL.filter (userLike filterCriteria)
+    CL.filter (userLike filterCriteria)
     $= CL.isolate 1
     =$ CL.mapM_ (liftIO . handleTweet)
 
