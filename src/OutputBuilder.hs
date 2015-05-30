@@ -36,8 +36,9 @@ wordToMarkup t
 buildHtml :: [TweetInfo] -> Html
 buildHtml tweets = H.docTypeHtml $ do
    H.head $
-      H.title "Output:"
+      H.title "Twitter output"
    H.body $ do
+      H.p (text "Output:")
       let htweets = fmap HtmlTweet tweets
       H.ul $ mapM_ (H.li . H.toHtml) htweets
 
