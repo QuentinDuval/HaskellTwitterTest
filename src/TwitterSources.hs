@@ -7,6 +7,7 @@ module TwitterSources (
 
 import Control.Monad.Trans.Resource
 import Data.Conduit as C
+import Data.Text
 import qualified Data.Conduit.List as CL
 import Network.HTTP.Conduit
 import Web.Twitter.Conduit
@@ -20,11 +21,11 @@ realSource logInfo m =
    sourceWithMaxId logInfo m homeTimeline $= CL.map extractInfo
 
 
-fakeSource :: (Monad m) => Source m TweetInfo
-fakeSource = yield
+fakeSource :: (Monad m) => Text -> Source m TweetInfo
+fakeSource author' = yield
    TweetInfo {
       _uniqueId = 1,
-      _author = AuthorInfo { _authorName = "john_doe", _authorPopularity = 2},
+      _author = AuthorInfo { _authorName = author', _authorPopularity = 2},
       _content = "Dummy content with link! http://www.google.fr",
       _popularity = 0}
 

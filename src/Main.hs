@@ -19,8 +19,10 @@ main = do
    withManager $ \m -> realSource logInfo m $$ tweetPipe "haskell"
    
    
-test :: IO()
-test = fakeSource $$ tweetPipe "haskell"
+test :: IO ()
+test = do
+   r <- fakeSource "haskell" $$ tweetSinkList "haskell"
+   print r
 
 
 

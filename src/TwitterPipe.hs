@@ -1,5 +1,6 @@
 module TwitterPipe (
-   tweetPipe
+   tweetPipe,
+   tweetSinkList
 ) where
 
 
@@ -14,9 +15,16 @@ import TwitterInfo
 
 tweetPipe :: (MonadIO m) => Text -> Sink TweetInfo m ()
 tweetPipe filterCriteria =
-    CL.filter (userLike filterCriteria)
-    $= CL.isolate 1
-    =$ CL.mapM_ (liftIO . handleTweet)
+   CL.filter (userLike filterCriteria)
+   $= CL.isolate 1
+   =$ CL.mapM_ (liftIO . handleTweet)
+
+
+tweetSinkList :: (Monad m) => Text -> Sink TweetInfo m [TweetInfo]
+tweetSinkList filterCriteria=
+   CL.filter (userLike filterCriteria)
+   $= CL.isolate 1
+   =$ CL.fold (flip (:)) []
 
 
 userLike :: Text -> TweetInfo -> Bool
