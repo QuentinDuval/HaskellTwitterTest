@@ -18,7 +18,7 @@ main :: IO()
 main = do
    logInfo <- fromFile =<< head <$> getArgs
    tweets <- withManager $ \m ->
-      tweetSelect (realSource logInfo m) "haskell" 10
+      tweetSelect (realSource logInfo m) "haskell" 50
    buildHtmlFile "out.html" tweets
    
    
